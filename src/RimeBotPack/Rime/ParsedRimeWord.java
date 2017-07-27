@@ -2,34 +2,40 @@ package RimeBotPack.Rime;
 
 
 /**
- * Created by anton.a.baranov on 10.07.2017.
+ *  @author anton.a.baranov
+ * created on 10.07.2017.
+ * разбор слова для поиска рифм
  */
-public final class RimeWord {
+public final class ParsedRimeWord {
     private final String word;
-    private final String[] lastSyllable;
+    private final String[] suffixes;
 
-    public RimeWord(String word) {
+    public ParsedRimeWord(String word) {
         this.word = word;
-        this.lastSyllable = WordParse.allSyllableVariants(WordParse.lastSyllable(word));
+        SuffixParser suffix = new SuffixParser(word);
+        this.suffixes = suffix.suffixes();
     }
 
     public String getWord() {
         return word;
     }
 
-    public String[] getLastSyllable() {
+    public int suffixesCount() {
+        return suffixes.length;
+    }
 
-        return lastSyllable;
+    public String getSuffix(int i) {
+        return suffixes[i];
     }
 
     @Override
     public String toString() {
-        String syllables = "";
-        for(String s: lastSyllable)
-            syllables += " " + s;
-        return "RimeWord{" +
+        String syll = "";
+        for(String s: suffixes)
+            syll += " " + s;
+        return "ParsedRimeWord{" +
                 "word='" + word + '\'' +
-                ", lastSyllable=" + syllables +
+                ", suffixes=" + syll +
                 '}';
     }
 
@@ -38,7 +44,7 @@ public final class RimeWord {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RimeWord that = (RimeWord) o;
+        ParsedRimeWord that = (ParsedRimeWord) o;
 
         return getWord().equals(that.getWord());
     }
